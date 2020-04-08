@@ -33,7 +33,7 @@ class Author implements \JsonSerializable {
 	/*
 	 * avatar url for this Author
 	 */
-	private $authorAvartarUrl;
+	private $authorAvatarUrl;
 
 	/*
 	 * email for this Author
@@ -68,7 +68,7 @@ class Author implements \JsonSerializable {
 	 * @throws \ Exception if some other exception uccurs
 	 * @Documentation https://php.net/manual/en/language.oop5.decon.php
 	 */
-	public function __construct($authorId,string $authorActivationToken,?string $authorAvartarUrl,string $authorEmail,string $authorHash,string $authorUsername) {
+	public function __construct($newAuthorId,string $newAuthorActivationToken,?string $newAuthorAvatarUrl,string $newAuthorEmail,string $newAuthorHash,string $newAuthorUsername) {
 		try{
 			$this->setAuthorId($newAuthorId);
 			$this->setAuthorActivationToken($newAuthorActivationToken);
