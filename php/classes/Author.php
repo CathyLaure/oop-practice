@@ -57,7 +57,7 @@ class Author implements \JsonSerializable {
 	/*
 	 * Constructor for this Author
 	 * @param string|Uuid $authorId id of Author or null if a new id
-	 * @param string $authorActivationToken activation token to safe gaurd against malicious entry
+	 * @param string $authorActivationToken activation token to safe gaurd against malicious code
 	 * @param string $authorAvatarUrl string containing an avatar url or null
 	 * @param string $authorEmail string containing the email
 	 * @param string $authorHash string containing the password hash
@@ -80,11 +80,79 @@ class Author implements \JsonSerializable {
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
+	}
 
+	/**
+	 * accessor method for author id
+	 *
+	 * @return Uuid value of author id
+	 **/
+	public function getAuthorId() : Uuid {
+		return($this->authorId);
+	}
+
+	/**
+	 * mutator method for author id
+	 *
+	 * @param Uuid|string $newAuthorId new value of author id
+	 * @throws \RangeException if $newAuthorId is not positive
+	 * @throws \TypeError if $newAuthorId is not a uuid or string
+	 **/
+	public function setAuthorId( $newAuthorId) : void {
+		try {
+			$uuid = self::validateUuid($newAuthorId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+
+		$this->authorId = $uuid;
+	}
+
+
+	/**
+	 * accessor method for activation Token
+	 *
+	 * @return string value of activation token
+	 **/
+
+	public function getAuthorActivationToken() : ?string {
+		return($this->authorActivationToken);
+	}
+
+	/**
+	 * mutator method for author activationToken
+	 *
+	 * @param string $newAuthorActivationToken
+	 * @throws \InvalidArgumentException if the token is not a string or is insecure
+	 * @throws \RangeException if the token is not exactly 32 characters
+	 * @throws \TypeError if $newAuthorId is not a uuid or string
+	 **/
+	public function setAuthorActivationToken(string $newAuthorActivationToken): void {
+		if($newAuthorActivationToken === null) {
+			$this->authorActivationToken = null;
+			return;
+		}
+		$newAuthorActivationToken = strtolower(trim($newAuthorActivationToken));
+		if(ctype_xdigit($newAuthorActivationToken) === false) {
+			throw(new\RangeException("author activation is not valid"));
+		}
+		//make sure the author activation token is only 32 characters
+		if(strlen($newAuthorActivationToken) !== 32) {
+			throw(new\RangeException("author activation has to be 32"));
+		}
+		$this->authorActivationToken = $newAuthorActivationToken;
+	}
+
+	/*
+	 * accessor foe author Avater Url
+	 */
+	public function getAuthorAvatarUrl() : string {
+		return($this->newAuthorAvatarUrl());
 	}
 
 	public function jsonserialize() {
-
+		//TODO: Implement jsonserializ
 	}
 
 }
